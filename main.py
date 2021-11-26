@@ -20,6 +20,11 @@ def find_post(id):
         if post["id"] == id:
             return post
 
+def find_index(id):
+    for i,post in enumerate(my_posts):
+        if post["id"] == id:
+            return i
+
 app = FastAPI()
 
 @app.get("/")
@@ -42,4 +47,13 @@ async def create_posts(post: Post):
     p = post.dict()
     p["id"] = randrange(0,100000)
     my_posts.append(p)
-    return Response(status_code=status.HTTP_201_CREATED)
+    Response(status_code=status.HTTP_201_CREATED)
+    return {"post":p}
+
+@app.delete("/posts/{id}")
+async def del_post(id:int):
+    index = find_index(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail={"message":f"Post with id:{id} is not present."})
+    my_posts.pop(index)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
