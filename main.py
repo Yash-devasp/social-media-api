@@ -57,3 +57,14 @@ async def del_post(id:int):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail={"message":f"Post with id:{id} is not present."})
     my_posts.pop(index)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+@app.put("/posts/{id}")
+async def updt_post(id:int,post:Post):
+    index = find_index(id)
+    if index == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail={"message":f"Post with id:{id} is not present."})
+    p = post.dict()
+    p["id"] = id
+    my_posts[index] = p
+    Response(status_code=status.HTTP_205_RESET_CONTENT)
+    return {"data":p}
