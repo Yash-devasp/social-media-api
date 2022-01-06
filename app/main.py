@@ -4,7 +4,7 @@ from . import models, auth
 from .routers import posts, users, votes
 from .config import settings
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
